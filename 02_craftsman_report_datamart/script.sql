@@ -51,74 +51,74 @@ dwh_update_delta AS (
 /* Выборка по расчёту витрины для данных из дельты изменений "dwh_delta", которые нужно вставить. */
 dwh_delta_insert_result AS (
     SELECT
-	        dd.craftsman_id AS craftsman_id,
-	        dd.craftsman_name AS craftsman_name,
-	        dd.craftsman_address AS craftsman_address,
-	        dd.craftsman_birthday AS craftsman_birthday,
-	        dd.craftsman_email AS craftsman_email,
-	        SUM(dd.product_price) - (SUM(dd.product_price) * 0.1) AS craftsman_money,
-	        SUM(dd.product_price) * 0.1 AS platform_money,
-	        COUNT(dd.order_id) AS count_order,
-	        AVG(dd.product_price) AS avg_price_order,
-	        AVG(dd.customer_age) AS avg_age_customer,
-	        PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY dd.diff_order_date) AS median_time_order_completed,
-	        MODE() WITHIN GROUP(ORDER BY dd.product_type) AS top_product_category,
-	        SUM(CASE WHEN dd.order_status = 'created' THEN 1 ELSE 0 END) AS count_order_created,
-	        SUM(CASE WHEN dd.order_status = 'in progress' THEN 1 ELSE 0 END) AS count_order_in_progress, 
-	        SUM(CASE WHEN dd.order_status = 'delivery' THEN 1 ELSE 0 END) AS count_order_delivery, 
-	        SUM(CASE WHEN dd.order_status = 'done' THEN 1 ELSE 0 END) AS count_order_done, 
-	        SUM(CASE WHEN dd.order_status != 'done' THEN 1 ELSE 0 END) AS count_order_not_done,
-	        dd.report_period AS report_period
-	        FROM dwh_delta dd
-	            WHERE dd.exist_craftsman_id IS NULL
-	                GROUP BY dd.craftsman_id, dd.craftsman_name, dd.craftsman_address, dd.craftsman_birthday, dd.craftsman_email, dd.report_period
+            dd.craftsman_id AS craftsman_id,
+            dd.craftsman_name AS craftsman_name,
+            dd.craftsman_address AS craftsman_address,
+            dd.craftsman_birthday AS craftsman_birthday,
+            dd.craftsman_email AS craftsman_email,
+            SUM(dd.product_price) - (SUM(dd.product_price) * 0.1) AS craftsman_money,
+            SUM(dd.product_price) * 0.1 AS platform_money,
+            COUNT(dd.order_id) AS count_order,
+            AVG(dd.product_price) AS avg_price_order,
+            AVG(dd.customer_age) AS avg_age_customer,
+            PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY dd.diff_order_date) AS median_time_order_completed,
+            MODE() WITHIN GROUP(ORDER BY dd.product_type) AS top_product_category,
+            SUM(CASE WHEN dd.order_status = 'created' THEN 1 ELSE 0 END) AS count_order_created,
+            SUM(CASE WHEN dd.order_status = 'in progress' THEN 1 ELSE 0 END) AS count_order_in_progress, 
+            SUM(CASE WHEN dd.order_status = 'delivery' THEN 1 ELSE 0 END) AS count_order_delivery, 
+            SUM(CASE WHEN dd.order_status = 'done' THEN 1 ELSE 0 END) AS count_order_done, 
+            SUM(CASE WHEN dd.order_status != 'done' THEN 1 ELSE 0 END) AS count_order_not_done,
+            dd.report_period AS report_period
+            FROM dwh_delta dd
+                WHERE dd.exist_craftsman_id IS NULL
+                    GROUP BY dd.craftsman_id, dd.craftsman_name, dd.craftsman_address, dd.craftsman_birthday, dd.craftsman_email, dd.report_period
 ),
 /* Выборка по расчёту витрины для данных из хранилища "dwh_result", которые нужно обновить. */
 dwh_delta_update_result AS (
     SELECT
-	        dr.craftsman_id AS craftsman_id,
-	        dr.craftsman_name AS craftsman_name,
-	        dr.craftsman_address AS craftsman_address,
-	        dr.craftsman_birthday AS craftsman_birthday,
-	        dr.craftsman_email AS craftsman_email,
-	        SUM(dr.product_price) - (SUM(dr.product_price) * 0.1) AS craftsman_money,
-	        SUM(dr.product_price) * 0.1 AS platform_money,
-	        COUNT(dr.order_id) AS count_order,
-	        AVG(dr.product_price) AS avg_price_order,
-	        AVG(dr.customer_age) AS avg_age_customer,
-	        PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY dr.diff_order_date) AS median_time_order_completed,
-	        MODE() WITHIN GROUP(ORDER BY dr.product_type) AS top_product_category,
-	        SUM(CASE WHEN dr.order_status = 'created' THEN 1 ELSE 0 END) AS count_order_created, 
-	        SUM(CASE WHEN dr.order_status = 'in progress' THEN 1 ELSE 0 END) AS count_order_in_progress, 
-	        SUM(CASE WHEN dr.order_status = 'delivery' THEN 1 ELSE 0 END) AS count_order_delivery, 
-	        SUM(CASE WHEN dr.order_status = 'done' THEN 1 ELSE 0 END) AS count_order_done, 
-	        SUM(CASE WHEN dr.order_status != 'done' THEN 1 ELSE 0 END) AS count_order_not_done,
-	        dr.report_period AS report_period
+            dr.craftsman_id AS craftsman_id,
+            dr.craftsman_name AS craftsman_name,
+            dr.craftsman_address AS craftsman_address,
+            dr.craftsman_birthday AS craftsman_birthday,
+            dr.craftsman_email AS craftsman_email,
+            SUM(dr.product_price) - (SUM(dr.product_price) * 0.1) AS craftsman_money,
+            SUM(dr.product_price) * 0.1 AS platform_money,
+            COUNT(dr.order_id) AS count_order,
+            AVG(dr.product_price) AS avg_price_order,
+            AVG(dr.customer_age) AS avg_age_customer,
+            PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY dr.diff_order_date) AS median_time_order_completed,
+            MODE() WITHIN GROUP(ORDER BY dr.product_type) AS top_product_category,
+            SUM(CASE WHEN dr.order_status = 'created' THEN 1 ELSE 0 END) AS count_order_created, 
+            SUM(CASE WHEN dr.order_status = 'in progress' THEN 1 ELSE 0 END) AS count_order_in_progress, 
+            SUM(CASE WHEN dr.order_status = 'delivery' THEN 1 ELSE 0 END) AS count_order_delivery, 
+            SUM(CASE WHEN dr.order_status = 'done' THEN 1 ELSE 0 END) AS count_order_done, 
+            SUM(CASE WHEN dr.order_status != 'done' THEN 1 ELSE 0 END) AS count_order_not_done,
+            dr.report_period AS report_period
             FROM dwh_result dr
-            	INNER JOIN dwh_update_delta ud ON ud.craftsman_id = dr.craftsman_id
-                	GROUP BY dr.craftsman_id, dr.craftsman_name, dr.craftsman_address, dr.craftsman_birthday, dr.craftsman_email, dr.report_period
+                INNER JOIN dwh_update_delta ud ON ud.craftsman_id = dr.craftsman_id
+                    GROUP BY dr.craftsman_id, dr.craftsman_name, dr.craftsman_address, dr.craftsman_birthday, dr.craftsman_email, dr.report_period
 ),
 /* Вставка новых показателей в витрину "craftsman_report_datamart" из выборки "dwh_delta_insert_result".  */
 insert_delta AS (
     INSERT INTO dwh.craftsman_report_datamart (
-	        craftsman_id,
-	        craftsman_name,
-	        craftsman_address,
-	        craftsman_birthday, 
-	        craftsman_email, 
-	        craftsman_money, 
-	        platform_money, 
-	        count_order, 
-	        avg_price_order, 
-	        avg_age_customer,
-	        median_time_order_completed,
-	        top_product_category, 
-	        count_order_created, 
-	        count_order_in_progress, 
-	        count_order_delivery, 
-	        count_order_done, 
-	        count_order_not_done, 
-	        report_period
+            craftsman_id,
+            craftsman_name,
+            craftsman_address,
+            craftsman_birthday, 
+            craftsman_email, 
+            craftsman_money, 
+            platform_money, 
+            count_order, 
+            avg_price_order, 
+            avg_age_customer,
+            median_time_order_completed,
+            top_product_category, 
+            count_order_created, 
+            count_order_in_progress, 
+            count_order_delivery, 
+            count_order_done, 
+            count_order_not_done, 
+            report_period
     ) SELECT 
             craftsman_id,
             craftsman_name,
@@ -192,8 +192,8 @@ insert_load_date AS (
     )
     SELECT 
             GREATEST(
-    			COALESCE(MAX(order_load_dttm), LOCALTIMESTAMP),
-    			COALESCE(MAX(craftsman_load_dttm), LOCALTIMESTAMP),
+                COALESCE(MAX(order_load_dttm), LOCALTIMESTAMP),
+                COALESCE(MAX(craftsman_load_dttm), LOCALTIMESTAMP),
                 COALESCE(MAX(customer_load_dttm), LOCALTIMESTAMP), 
                 COALESCE(MAX(product_load_dttm), LOCALTIMESTAMP)
             ) AS max_load_dttm
