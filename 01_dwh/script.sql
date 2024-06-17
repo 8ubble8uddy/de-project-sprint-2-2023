@@ -8,7 +8,7 @@ CREATE TEMP TABLE tmp_sources AS
 WITH
 source_1 AS (
 	SELECT  
-			order_id,
+            order_id,
 	        order_created_date,
 	        order_completion_date,
 	        order_status,
@@ -27,11 +27,11 @@ source_1 AS (
 	        customer_address,
 	        customer_birthday,
 	        customer_email 
-			FROM source1.craft_market_wide
+            FROM source1.craft_market_wide
 ),
 source_2 AS (
 	SELECT  
-			t2.order_id,
+            t2.order_id,
 	        t2.order_created_date,
 	        t2.order_completion_date,
 	        t2.order_status,
@@ -50,13 +50,13 @@ source_2 AS (
 	        t2.customer_address,
 	        t2.customer_birthday,
 	        t2.customer_email 
-	  		FROM source2.craft_market_masters_products t1 
-	    		INNER JOIN source2.craft_market_orders_customers t2 ON t2.product_id = t1.product_id AND 
-	    															   t2.craftsman_id = t1.craftsman_id
+            FROM source2.craft_market_masters_products t1 
+                INNER JOIN source2.craft_market_orders_customers t2 ON t2.product_id = t1.product_id AND
+                                                                       t2.craftsman_id = t1.craftsman_id
 ),
 source_3 AS (
 	SELECT  
-			t1.order_id,
+            t1.order_id,
 	        t1.order_created_date,
 	        t1.order_completion_date,
 	        t1.order_status,
@@ -75,13 +75,13 @@ source_3 AS (
 	        t3.customer_address,
 	        t3.customer_birthday,
 	        t3.customer_email
-	  		FROM source3.craft_market_orders t1
-			    INNER JOIN source3.craft_market_craftsmans t2 ON t2.craftsman_id = t1.craftsman_id 
-			    INNER JOIN source3.craft_market_customers t3 ON t3.customer_id = t1.customer_id
+            FROM source3.craft_market_orders t1
+                INNER JOIN source3.craft_market_craftsmans t2 ON t2.craftsman_id = t1.craftsman_id 
+                INNER JOIN source3.craft_market_customers t3 ON t3.customer_id = t1.customer_id
 ),
 source_4 AS (
 	SELECT  
-			t1.order_id,
+            t1.order_id,
 	        t1.order_created_date,
 	        t1.order_completion_date,
 	        t1.order_status,
@@ -101,7 +101,7 @@ source_4 AS (
 	        t2.customer_birthday,
 	        t2.customer_email 
 		    FROM external_source.craft_products_orders t1 
-		        INNER JOIN external_source.customers t2 ON t2.customer_id = t1.customer_id
+                INNER JOIN external_source.customers t2 ON t2.customer_id = t1.customer_id
 )
 	SELECT * FROM source_1
 	UNION
@@ -150,7 +150,7 @@ WHEN NOT MATCHED THEN
 DROP TABLE IF EXISTS tmp_sources_fact;
 CREATE TEMP TABLE tmp_sources_fact AS 
 SELECT  
-		    dp.product_id,
+        dp.product_id,
         dc.craftsman_id,
         dcust.customer_id,
         src.order_created_date,
