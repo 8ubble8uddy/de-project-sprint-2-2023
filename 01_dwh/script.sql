@@ -51,8 +51,8 @@ source_2 AS (
 			t2.customer_birthday,
 			t2.customer_email 
 			FROM source2.craft_market_masters_products t1 
-			INNER JOIN source2.craft_market_orders_customers t2 ON t2.product_id = t1.product_id AND
-																   t2.craftsman_id = t1.craftsman_id
+				INNER JOIN source2.craft_market_orders_customers t2 ON t2.product_id = t1.product_id AND
+																	   t2.craftsman_id = t1.craftsman_id
 ),
 source_3 AS (
 	SELECT  
